@@ -1,0 +1,28 @@
+== Dependencies ========================
+
+boehm-gc >= 7.0
+http://www.hpl.hp.com/personal/Hans_Boehm/gc/
+
+libsee >= 3.0
+http://www.adaptive-enterprises.com.au/~d/software/see/
+
+cgic >= 2.0
+http://www.boutell.com/cgic/
+			
+== Makefile ============================
+
+Change INCDIR, LIBDIR, and BINDIR to reflect your setup.
+
+== Apache ==============================
+
+Add the following to your httpd.conf to handle .golf scripts:
+	
+AddHandler golf-script .golf
+Action golf-script /path/to/golf
+
+== JS and C Paths ======================
+
+Currently JS include and C include paths are hard coded.  Change paths accordingly in the following files:
+
+boot/serverside.js lines 2 and 3
+golf.c lines lines 37, 45, 53 

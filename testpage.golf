@@ -1,0 +1,46 @@
+document.title = "Golf is Awesome";
+
+action = function() {
+	result_elem = document.getElementById("results");
+	result_elem.appendChild(document.createTextNode("you clicked on the thing"));
+	
+	var rem = document.getElementById("fakelink");
+	rem.parentNode.removeChild(rem);
+	
+	link = document.createElement("a");
+	link.setAttribute("href", serverside?"testpage.golf?serverside=1":"testpage.golf");
+	link.appendChild(document.createTextNode("go back"));
+	document.body.appendChild(link);
+};
+
+p0 = document.createElement("p");
+p0.appendChild(document.createTextNode("your golf script is being executed "+(serverside ? "server-side: " : "client-side: ")));
+
+switchlink = document.createElement("a");
+switchlink.setAttribute("href", serverside?"testpage.golf":"testpage.golf?serverside=1");
+switchlink.appendChild(document.createTextNode(serverside?"switch to client-side":"switch to server-side"));
+p0.appendChild(switchlink);
+
+p0.appendChild(document.createElement("br"));
+
+p0.appendChild(document.createTextNode("the link below "+(serverside ? "is really a link" : "isn't really a link")));
+p0.appendChild(document.createElement("br"));
+
+p0.appendChild(document.createTextNode("depending on whether or not your client supports javascript, the link below is either a link to a function call executed on the server or a direct function call executed in your browser"));
+p0.appendChild(document.createElement("br"));
+document.body.appendChild(p0);
+
+
+p1 = document.createElement("p");
+document.body.appendChild(p1);
+
+fakelink = document.createElement("span");
+fakelink.id = "fakelink";
+fakelink.setAttribute("onclick", "action();");
+fakelink.setAttribute("style", "text-decoration:underline; color:blue; cursor:pointer;");
+fakelink.appendChild(document.createTextNode("click on me"));
+p1.appendChild(fakelink);
+
+p2 = document.createElement("p");
+p2.id = "results";
+document.body.appendChild(p2);

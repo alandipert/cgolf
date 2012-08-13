@@ -1,0 +1,56 @@
+== Manifesto ===========================
+
+Too much time is wasted writing web application backends and frontends in different languages.  A more robust, general-purpose solution is in order.  A solution that lets you write a complete web application in one-language; a solution that transparently modifies the way it displays itself to meet the requirements of the browser or a device.  A solution that lets you have a rich 2.0 application with animation and AJAX for the modern browser one second, and an HTML application with links to the same content for the spider or cellphone the next.
+
+== About ===============================
+
+Golf is a server-side JavaScript interpreter with it's own DOM written in JavaScript.
+
+What makes golf unique is that one script can be written for both client and server JavaScript runtimes, and golf will decide on-the-fly which way to handle a request for a script.
+
+Because it's equipped with it's own DOM and browser environment on the server-side, golf is capable of running popular libraries like jQuery and Prototype.
+
+golf has a mechanism for converting elements with attached events like "onClick" into links that can be followed by spiders, or used to navigate the site in browsers that don't support JavaScript.
+
+== Example =============================
+
+Consider the following JavaScript code, which creates a DOM Node and appends it to document.body:
+
+	fakelink = document.createElement("span");
+	fakelink.id = "fakelink";
+	fakelink.setAttribute("onclick", "next10();");
+	fakelink.setAttribute("style", "text-decoration:underline; color:blue; cursor:pointer;");
+	fakelink.appendChild(document.createTextNode("next 10 items"));
+	document.body.appendChild(fakelink);
+	
+The above code uses the DOM API to create a <span> styled to look like a link.  An "onclick" attribute is added and associated with the function "next10()."  This approach is typical of AJAX web applications.  When the user clicks "next 10 items," the function next10() is called and the next 10 of whatever are downloaded asynchronously from a PHP or Ruby or whatever program on a server somewhere that has access to a database and returns results in JSON.
+
+The problem is, if you don't have JavaScript on your browser (or spider), there's absolutely no way for you to retrieve the next 10 results.
+
+But we can have JavaScript on the server.  And if we know our client isn't capable of "clicking" on the above <span>, we can run the above code on our server and transform it into a regular link with an "href" attribute that points to a page with the next 10 results.  How?
+
+we turn this:
+	<span onclick="next10();"...>next 10 items</span>
+
+into this:
+	<a href = "myapp.golf?next10();"...>next 10 items</a>
+	
+This is possible because now that the server is executing the JavaScript, it can save the JavaScript execution state and the client can jump to different functions running server-side using a simple GET.
+
+There are details, like maintaining execution state.  This involves a mechanism for databasing DOM instances or "execution contexts" and pairing them with users with a sessions mechanism.  Golf isn't done yet.
+
+== Goals ===============================
+
+1.	Make it possible to write rich, AJAX web applications using one language on both client and server: JavaScript.
+2.	Provide a robust server-side DOM that popular JavaScript libraries can run on top of, server-side.
+3.	Serialize the DOM throughout a server-side session.
+4.	Provide a server-side HTML and XML parser to ease templating.
+5.	Provide "content views," which generate HTML or XML from "master" content using XSLT.
+6.	Transparently "downgrade" rich AJAX web applications into flat HTML that can be browsed by spiders or other clients without JavaScript support.
+
+== Future ===============================
+
+golf as purely a robust JavaScript application platform is the beginning of a larger effort by the developers to produce software that can:
+
+1.	Transparently optimize and downgrade a web application for the software or device it is being viewed with.  Provide server-side rendering technology that tweaks CSS, renders SVGs into rasters, and performs automatic server-side execution of JavaScript code depending on the level of browser support available.
+2.	Provide an RPC mechanism so that the client and server can share objects and data, effectively consolidating the client and server JavaScript environments into one transparent, coherent, stateful runtime.
